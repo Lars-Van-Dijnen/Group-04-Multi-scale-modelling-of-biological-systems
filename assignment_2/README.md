@@ -1,7 +1,7 @@
 # E. coli Core Model Assignment — Enzyme Activity-Constrained FBA
 
 **Course**: KEN3170 — Multi-scale modeling of biological systems
-**Group number**: [2]
+**Group number**: [4]
 
 ---
 
