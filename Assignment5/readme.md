@@ -3,16 +3,14 @@
 Answers on the infection simulation, the `CellHouseKeeping` and `CelltoCellTransport` functions, the effect of `rel_cell_div_threshold`, a comparison with the auxin-growth model, and a proposed defense mechanism.
 
 ## Contents
-0. [Introduction]
-(#0-introduction)
+0. [Introduction](#0-introduction)
 1. [Spatial spread and tissue deformation](#1-spatial-spread-and-tissue-deformation)
 2. [`CellHouseKeeping`: chemical signal and wall stiffness](#2-cellhousekeeping-chemical-signal-and-wall-stiffness)
 3. [`CelltoCellTransport`: stiffness-dependent diffusion](#3-celltocelltransport-stiffness-dependent-diffusion)
 4. [Effect of `rel_cell_div_threshold`](#4-effect-of-rel_cell_div_threshold)
 5. [Cell-neighbour interactions: infection vs. auxin-growth model](#5-cell-neighbour-interactions-infection-vs-auxin-growth-model)
 6. [Proposed wall-stiffening defense response](#6-proposed-wall-stiffening-defense-response)
-7. [Conclusion]
-(#7-conclusion)
+7. [Conclusion](#7-conclusion)
 
 ## 0. Introduction
 
@@ -57,19 +55,7 @@ Overall, the infection spread gradually from the pathogen into nearby cells and 
 The `CellHouseKeeping` function connects the pathogen-associated chemical signal to changes in the mechanical properties of plant cell walls. For each cell, the chemical level is first converted into a normalized pathogen signal. This value is limited to a maximum of 1.2.
 
 ### Wall stiffness rule
-In uninfected conditions, the wall stiffness is set to 3. Once the normalized signal exceeds 0.1 (corresponding to $\text{Chemical}(0) > 0.05$), the stiffness of host-cell wall elements is progressively reduced:
-
-$$
-\text{wallstiffness} = 3 - \text{patho\_chem\_level}
-$$
-
-Higher concentrations of the pathogen-associated chemical therefore make the cell walls graduatly weaker and easier to deform. Because the signal is limmited to 1.2, the minimum wall stiffness produced by this rule is 1.8. Cells below the threshold keep the default stiffness of 3.
-
-| Condition | Wall stiffness |
-|-----------|----------------|
-| `patho_chem_level` ≤ 0.1 (`Chemical(0)` ≤ 0.05) | 3 (default) |
-| `patho_chem_level` > 0.1 | $3 - \text{patho\_chem\_level}$ |
-| `patho_chem_level` capped at 1.2 | 1.8 (minimum) |
+In uninfected conditions, the wall stiffness is set to 3. Once the normalized signal exceeds 0.1 (corresponding to $\text{Chemical}(0) > 0.05$), the stiffness of host-cell wall elements is progressively reduced according to `wallstifness`= 3 - `patho_chem_level`. Higher concentrations of the pathogen-associated chemical therefore make the cell walls graduatly weaker and easier to deform. Because the signal is limmited to 1.2, the minimum wall stiffness produced by this rule is 1.8. Cells below the threshold keep the default stiffness of 3.
 
 ### Mechanical consequence
 
@@ -150,24 +136,15 @@ The low-threshold simulation therefore shows both rapid pathogen population expa
 
 ### High division threshold: `rel_cell_div_threshold = 20`
 
-Increasing the threshold to 20 produces the opposite behavior. A pathogen cell can divide only when
-
-$$
-A > 20 \, A_{\text{base}},
-$$
-
-which is difficult to reach within the simulated period. The red pathogen therefore remains as one, or very few, cells and mainly increases in size through `EnlargeTargetArea(2)` rather than proliferating.
+Increasing the threshold to 20 produces the opposite behavior. A pathogen cell can divide only when  its area becomes greater than 20 times its base area, which is difficult to reach within the simulated period. The red pathogen therefore remains as one, or very few, cells and mainly increases in size through `EnlargeTargetArea(2)` rather than proliferating.
 
 There are consequently fewer independent chemical-producing pathogen cells. Since chemical production is assigned per pathogen cell in `CellDynamics`, the total source strength grows much more slowly than in the 0.2 condition.
 
 Color changes remain more localized around the original infection area. A purple or otherwise altered coloration can still develop because the existing pathogen continues to produce chemical, but the affected region expands more slowly. Cells farther from the pathogen retain their original cyan/blue or green appearance for longer, indicating lower chemical concentrations.
-Wall weakening is also more localized. Only cells in which `Chemical(0)` rises above approximately 0.05 enter the reduced-stiffness state. Since fewer cells receive high chemical concentrations quickly, the positive chemical–mechanical feedback
+Wall weakening is also more localized. Only cells in which `Chemical(0)` rises above approximately 0.05 enter the reduced-stiffness state. Since fewer cells receive high chemical concentrations quickly, the positive chemical–mechanical feedback is initiated in a smaller region and progresses more slowly.
 
-  $$
-  C \uparrow \rightarrow k_{\text{wall}} \downarrow \rightarrow D_{\text{eff}} \uparrow \rightarrow \text{chemical spread} \uparrow
-  $$
+![Feednack 2](images/Feedback2.png)
 
-  is initiated in a smaller region and progresses more slowly.
 
 The high-threshold run therefore favors enlargement of the existing pathogen rather than multiplication of the pathogen population. It seems that the local pathogen can still deform neighboring host cells mechanically, particularly as it becomes large, but the chemically affected color zone and the associated wall weakening are expected to spread less rapidly through the tissue.
 
