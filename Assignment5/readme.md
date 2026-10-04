@@ -14,7 +14,7 @@ Answers on the infection simulation, the `CellHouseKeeping` and `CelltoCellTrans
 
 ## 0. Introduction
 
-In this assignment we  used the VirtualLeaf infection model to investigate how pathogen growth, chemical signaling, cell-wall mechanics, and tissue deformation are coupled within a simulated plant tissue. The approach combined inspection of the model code with controlled parameter changes and time-course visualization. Most attention was given to the CellHouseKeeping, CelltoCellTransport, CellDynamics, and SetCellColor functions, since these define all relevant aspects of pathogen growth and division and visualization of infection intensity. 
+In this assignment we  used the VirtualLeaf infection model to investigate how pathogen growth, chemical signaling, cell-wall mechanics, and tissue deformation are coupled within a simulated plant tissue. The approach combined inspection of the model code with controlled parameter changes and time-course visualization. Most attention was given to the `CellHouseKeeping`, `CelltoCellTransport`, `CellDynamics`, and `SetCellColor` functions, since these define all relevant aspects of pathogen growth and division and visualization of infection intensity. 
 
 In the model, pathogen cells grow and divide, produce an infection-associated chemical, and expose neighboring host cells to that signal; host-cell wall stiffness decreases once the chemical exceeds a threshold, while the effective diffusion coefficient increases as stiffness decreases. 
 
@@ -55,7 +55,7 @@ Overall, the infection spread gradually from the pathogen into nearby cells and 
 The `CellHouseKeeping` function connects the pathogen-associated chemical signal to changes in the mechanical properties of plant cell walls. For each cell, the chemical level is first converted into a normalized pathogen signal. This value is limited to a maximum of 1.2.
 
 ### Wall stiffness rule
-In uninfected conditions, the wall stiffness is set to 3. Once the normalized signal exceeds 0.1 (corresponding to $\text{Chemical}(0) > 0.05$), the stiffness of host-cell wall elements is progressively reduced according to `wallstifness`= 3 - `patho_chem_level`. Higher concentrations of the pathogen-associated chemical therefore make the cell walls graduatly weaker and easier to deform. Because the signal is limmited to 1.2, the minimum wall stiffness produced by this rule is 1.8. Cells below the threshold keep the default stiffness of 3.
+In uninfected conditions, the wall stiffness is set to 3. Once the normalized signal exceeds 0.1 (corresponding to `Chemical(0) > 0.05`), the stiffness of host-cell wall elements is progressively reduced according to `wallstifness`= 3 - `patho_chem_level`. Higher concentrations of the pathogen-associated chemical therefore make the cell walls graduatly weaker and easier to deform. Because the signal is limmited to 1.2, the minimum wall stiffness produced by this rule is 1.8. Cells below the threshold keep the default stiffness of 3.
 
 ### Mechanical consequence
 
